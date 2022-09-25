@@ -11,10 +11,11 @@ namespace WinFormsSnake
         public static int Width { get; set; }
         public static int Height { get; set; }
         public static string direction;
-        public Settings()
+
+        public Settings(int foodSize)
         {
-            Width = 15;
-            Height = 15;
+            Width = foodSize;
+            Height = foodSize;
             direction = "left";
         }
     }
