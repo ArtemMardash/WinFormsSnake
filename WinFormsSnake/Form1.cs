@@ -1,3 +1,4 @@
+using System.Drawing.Imaging;
 namespace WinFormsSnake
 {
     public partial class SnakeForm1 : Form
@@ -33,13 +34,15 @@ namespace WinFormsSnake
             foodColour = Brushes.Red;
         }
 
-
+        /// <summary>
+        /// Method that starting game again and used in start_button1
+        /// </summary>
         private void RestartGame()
         {
             snake.Clear();
 
-            maxWidth = pictureBox1.Width / Settings1.Width - 1;
-            maxHeight = pictureBox1.Height / Settings1.Height - 1;
+            maxWidth = pictureBox1.Width / Settings.Width - 1;
+            maxHeight = pictureBox1.Height / Settings.Height - 1;
 
             foodSize = Convert.ToInt32(Food_SizenumericUpDown1.Value);
             new Settings(foodSize);
@@ -63,7 +66,9 @@ namespace WinFormsSnake
             timer1.Start();
 
         }
-
+        /// <summary>
+        /// A method that increases the speed and size of a snake when it eats
+        /// </summary>
         private void EatFood()
         {
             Circle body = new Circle { X = snake[snake.Count - 1].X, Y = snake[snake.Count - 1].Y };
@@ -76,7 +81,9 @@ namespace WinFormsSnake
                 timer1.Interval -= 15;
             }
         }
-
+        /// <summary>
+        /// The method that stop the game and save the record
+        /// </summary>
         private void GameOver()
         {
             timer1.Stop();
@@ -95,7 +102,11 @@ namespace WinFormsSnake
             RestartGame();
 
         }
-
+        /// <summary>
+        /// A method that allows you to control the snake using the arrows
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SnakeForm1_KeyDown(object sender, KeyEventArgs e)
         {
             if((e.KeyCode == Keys.Left) && (WinFormsSnake.Settings.direction != "right"))
@@ -115,7 +126,11 @@ namespace WinFormsSnake
                 goDown = true;
             }
         }
-
+        /// <summary>
+        /// A method that allows you to control the snake using the arrows
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SnakeForm1_KeyUp(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Left)
@@ -234,16 +249,54 @@ namespace WinFormsSnake
         {
             Food_SizenumericUpDown1.Value = 15;
         }
+        /// <summary>
+        /// Save records to file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Snapbutton2_Click(object sender, EventArgs e)
+        {
+            Label caption = new Label();
+            caption.Text = "High score:" + highScore;
+            caption.Font = new Font("Black", 16, FontStyle.Regular);
+
+            caption.AutoSize = false;
+            caption.Width = pictureBox1.Width;
+            caption.Height = 30;
+            caption.TextAlign = ContentAlignment.MiddleCenter;
+            pictureBox1.Controls.Add(caption);
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.FileName = " Snake game";
+            sfd.DefaultExt = "jpg";
+            sfd.Filter = "JPG Image File |*.jpg";
+            sfd.ValidateNames = true;
+
+            if(sfd.ShowDialog() == DialogResult.OK)
+            {
+                int width = Convert.ToInt32(pictureBox1.Width);
+                int height = Convert.ToInt32(pictureBox1.Height);   
+                Bitmap bpm = new Bitmap(width, height);
+                pictureBox1.DrawToBitmap(bpm, new Rectangle(0,0, width, height));
+                bpm.Save(sfd.FileName, ImageFormat.Jpeg);
+                pictureBox1.Controls.Remove(caption);
+            }
+        }
 
         #endregion
 
+        /// <summary>
+        /// a method that depicts a snake and food in the picturebox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UpdatePictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics canvas = e.Graphics;
             Brush snakeColour;
 
-            maxWidth = pictureBox1.Width/Settings1.Width - 1;
-            maxHeight = pictureBox1.Height/Settings1.Height - 1;
+            maxWidth = pictureBox1.Width/Settings.Width - 1;
+            maxHeight = pictureBox1.Height/Settings.Height - 1;
 
             pictureBox1.BackColor = fontColour;
 
@@ -276,45 +329,12 @@ namespace WinFormsSnake
                 );
         }
 
-        //private void UpdatePictureBoxGraphics(object sender, PaintEventArgs e)
-        //{
-        //    Graphics canvas = e.Graphics;
-        //    Brush snakeColour;
-
-        //    maxWidth = pictureBox.Width / Settings.Width - 1;
-        //    maxHeight = pictureBox.Height / Settings.Height - 1;
-
-        //    pictureBox.BackColor = fontColor;
-
-        //    for (int i = 0; i < snake.Count; i++)
-        //    {
-        //        if (i == 0)
-        //        {
-        //            snakeColour = snakeHeadColor;
-        //        }
-        //        else
-        //        {
-        //            snakeColour = snakeBodyColor;
-        //        }
-
-        //        canvas.FillEllipse(snakeColour, new Rectangle
-        //            (
-        //            snake[i].X * Settings.Width,
-        //            snake[i].Y * Settings.Height,
-        //            Settings.Width, Settings.Height
-        //            ));
-        //    }
-
-
-        //    canvas.FillEllipse(foodColor, new Rectangle
-        //    (
-        //    food.X * Settings.Width,
-        //    food.Y * Settings.Height,
-        //    Settings.Width, Settings.Height
-        //    ));
-        //}
-
-
+        /// <summary>
+        /// a method that transmits coordinates and determines when the snake has 
+        /// eaten food, and when it has bitten itself
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timer1_Tick(object sender, EventArgs e)
         {
             if(goLeft )

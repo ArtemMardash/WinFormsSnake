@@ -97,7 +97,7 @@
             this.Startbutton1.ForeColor = System.Drawing.SystemColors.InfoText;
             this.Startbutton1.Location = new System.Drawing.Point(61, 27);
             this.Startbutton1.Name = "Startbutton1";
-            this.Startbutton1.Size = new System.Drawing.Size(112, 34);
+            this.Startbutton1.Size = new System.Drawing.Size(155, 34);
             this.Startbutton1.TabIndex = 1;
             this.Startbutton1.Text = "Start";
             this.Startbutton1.UseVisualStyleBackColor = false;
@@ -107,10 +107,11 @@
             // 
             this.Snapbutton2.Location = new System.Drawing.Point(61, 89);
             this.Snapbutton2.Name = "Snapbutton2";
-            this.Snapbutton2.Size = new System.Drawing.Size(112, 34);
+            this.Snapbutton2.Size = new System.Drawing.Size(155, 34);
             this.Snapbutton2.TabIndex = 2;
-            this.Snapbutton2.Text = "Snap";
+            this.Snapbutton2.Text = "Save picture";
             this.Snapbutton2.UseVisualStyleBackColor = true;
+            this.Snapbutton2.Click += new System.EventHandler(this.Snapbutton2_Click);
             // 
             // label1
             // 
